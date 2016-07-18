@@ -2,7 +2,30 @@
 
 /**
  * This renders the component's whole content.
+ * @param values
  */
 {template .render}
-	<div>Hello World</div>
+	<div class="multi-input">
+		{foreach $value in $values}
+			{call .field}
+				{param index: index($value) /}
+				{param value: $value /}
+			{/call}
+		{/foreach}
+		{call .field /}
+	</div>
+{/template}
+
+/**
+ * @param? index
+ * @param? value
+ */
+{template .field}
+	<input
+		type="text"
+		value="{$value ?: ''}"
+		class="form-control"
+		data-index="{$index ?: -1}"
+		data-oninput="handleInput_"
+	/>
 {/template}
