@@ -1,38 +1,38 @@
 {
-	"name": "metal-multi-input",
-	"version": "0.0.0",
-	"description": "Metal.js component that automatically adds new fields to guarantee that there will always be an empty field at the end",
-	"license": "BSD",
-	"repository": "wedeploy/metal-multi-input",
-	"engines": {
-		"node": ">=0.12.0",
-		"npm": ">=3.0.0"
-	},
-	"main": "lib/MultiInput.js",
-	"jsnext:main": "src/MultiInput.js",
-	"files": [
-		"lib",
-		"src",
-		"test"
-	],
-	"scripts": {
-		"build": "gulp build",
-		"compile": "babel --presets metal -d lib/ src/",
-		"prepublish": "gulp soy && npm run compile",
-		"test": "gulp test",
-		"watch": "gulp build:watch"
-	},
-	"keywords": [
-		"metal"
-	],
-	"dependencies": {
+  "name": "metal-multi-input",
+  "version": "1.0.0",
+  "description": "Metal.js component that automatically adds new fields to guarantee that there will always be an empty field at the end",
+  "license": "BSD",
+  "repository": "wedeploy/metal-multi-input",
+  "engines": {
+    "node": ">=0.12.0",
+    "npm": ">=3.0.0"
+  },
+  "main": "lib/MultiInput.js",
+  "jsnext:main": "src/MultiInput.js",
+  "files": [
+    "lib",
+    "src",
+    "test"
+  ],
+  "scripts": {
+    "build": "gulp build",
+    "compile": "babel --presets metal -d lib/ src/",
+    "prepublish": "gulp soy && npm run compile",
+    "test": "gulp test",
+    "watch": "gulp build:watch"
+  },
+  "keywords": [
+    "metal"
+  ],
+  "dependencies": {
     "bootstrap": "^3.3.6",
-		"metal-soy": "^1.0.0"
-	},
-	"devDependencies": {
-		"babel-cli": "^6.4.5",
-		"babel-preset-metal": "^4.0.0",
-		"gulp": "^3.8.11",
-		"gulp-metal": "^1.0.0"
-	}
+    "metal-soy": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.4.5",
+    "babel-preset-metal": "^4.0.0",
+    "gulp": "^3.8.11",
+    "gulp-metal": "^1.0.0"
+  }
 }
