@@ -30,27 +30,29 @@
  * @param? value
  */
 {template .field}
-	<div class="col-md-11">
-		<input
-			type="text"
-			value="{$value ?: ''}"
-			class="form-control"
-			data-index="{isNonnull($index) ? $index : -1}"
-			data-oninput="handleInput_"
-			name="{isNonnull($index) and isNonnull($name) ? ($name + ($index + 1)) : ''}"
-			placeholder="{$placeholder ?: ''}"
-		/>
-	</div>
-	<div class="col-md-1">
-		{if isNonnull($index)}
-			<button
-				type="button"
-				class="close"
-				data-onclick="handleRemoveClick_"
+	<div>
+		<div class="col-md-11">
+			<input
+				type="text"
+				value="{$value ?: ''}"
+				class="form-control"
 				data-index="{isNonnull($index) ? $index : -1}"
-				aria-label="Remove">
-				<span aria-hidden="true">×</span>
-			</button>
-		{/if}
+				data-oninput="handleInput_"
+				name="{isNonnull($index) and isNonnull($name) ? ($name + ($index + 1)) : ''}"
+				placeholder="{$placeholder ?: ''}"
+			/>
+		</div>
+		<div class="col-md-1">
+			{if isNonnull($index)}
+				<button
+					type="button"
+					class="close"
+					data-onclick="handleRemoveClick_"
+					data-index="{isNonnull($index) ? $index : -1}"
+					aria-label="Remove">
+					<span aria-hidden="true">×</span>
+				</button>
+			{/if}
+		</div>
 	</div>
 {/template}
