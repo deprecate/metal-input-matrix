@@ -2,6 +2,7 @@
 
 /**
  * This renders the component's whole content.
+ * @param? placeholder
  * @param values
  */
 {template .render}
@@ -9,15 +10,19 @@
 		{foreach $value in $values}
 			{call .field}
 				{param index: index($value) /}
+				{param placeholder: $placeholder /}
 				{param value: $value /}
 			{/call}
 		{/foreach}
-		{call .field /}
+		{call .field}
+			{param placeholder: $placeholder /}
+		{/call}
 	</div>
 {/template}
 
 /**
  * @param? index
+ * @param? placeholder
  * @param? value
  */
 {template .field}
@@ -28,6 +33,7 @@
 			class="form-control"
 			data-index="{isNonnull($index) ? $index : -1}"
 			data-oninput="handleInput_"
+			placeholder="{$placeholder ?: ''}"
 		/>
 	</div>
 	<div class="col-md-1">

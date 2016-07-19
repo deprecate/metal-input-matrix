@@ -1,5 +1,6 @@
 'use strict';
 
+import core from 'metal';
 import templates from './MultiInput.soy.js';
 import Component from 'metal-component';
 import Soy from 'metal-soy';
@@ -42,6 +43,11 @@ class MultiInput extends Component {
 Soy.register(MultiInput, templates);
 
 MultiInput.STATE = {
+	placeholder: {
+		validator: core.isString,
+		value: ''
+	},
+
 	values: {
 		valueFn: () => []
 	}
