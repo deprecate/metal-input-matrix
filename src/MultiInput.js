@@ -43,6 +43,11 @@ class MultiInput extends Component {
 Soy.register(MultiInput, templates);
 
 MultiInput.STATE = {
+	name: {
+		validator: core.isString,
+		value: ''
+	},
+
 	placeholder: {
 		validator: core.isString,
 		value: ''
