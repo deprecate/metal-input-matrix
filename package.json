@@ -1,6 +1,6 @@
 {
   "name": "metal-multi-input",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Metal.js component that automatically adds new fields to guarantee that there will always be an empty field at the end",
   "license": "BSD",
   "repository": "wedeploy/metal-multi-input",
