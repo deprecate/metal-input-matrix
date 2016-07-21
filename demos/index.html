@@ -10,10 +10,20 @@
 			margin-bottom: 20px;
 		}
 
+		.multi-input-label {
+			display: inline-block;
+			margin-right: 10px;
+			width: 36%
+		}
+
 		.multi-input-field {
 			display: inline-block;
 			margin-right: 10px;
 			width: 40%
+		}
+
+		.multi-input-labels .multi-input-label:last-child {
+			margin-right: 10%;
 		}
 
 		.multi-input-fields-left {
@@ -33,14 +43,15 @@
 			fieldsConfig: [
 				{
 					name: 'name',
-					placeholder: 'Name'
+					placeholder: 'Jose'
 				},
 				{
 					disableDuplication: true,
 					name: 'age',
-					placeholder: 'Age'
+					placeholder: '19'
 				}
 			],
+			labels: ['Name', 'Age'],
 			values: [['Maira', 26], ['', 12]]
 		});
 	</script>

@@ -92,6 +92,14 @@ MultiInput.STATE = {
 	},
 
 	/**
+	 * The labels for each field group.
+	 * @type {Array}
+	 */
+	labels: {
+		validator: core.isArray
+	},
+
+	/**
 	 * The values for each field in each rendered row. For example, setting this
 	 * to [['foo1', 'bar1'], ['foo2', 'bar2']] will render two rows of two fields
 	 * each, plus an empty row (unless "disableDuplication" was is true in
