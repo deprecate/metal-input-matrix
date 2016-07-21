@@ -21,23 +21,29 @@ describe('MultiInput', function() {
 		assert.strictEqual('', fields[0].value);
 	});
 
-	it('should render a single row with a single text field for the given value', function() {
+	it('should render a single text field for the given value plus an empty one below', function() {
 		comp = new MultiInput({
 			values: [['foo']]
 		});
-		assert.strictEqual(1, comp.element.childNodes.length);
+		assert.strictEqual(2, comp.element.childNodes.length);
 
 		let fields = getFieldsForRow(comp.element, 0);
 		assert.strictEqual(1, fields.length);
 		assert.strictEqual('foo', fields[0].value);
+
+		fields = getFieldsForRow(comp.element, 1);
+		assert.strictEqual(1, fields.length);
+		assert.strictEqual('', fields[0].value);
+
+		assert.deepEqual([['foo'], []], comp.values);
 	});
 
-	it('should render multiples rows with multiple text field for the given value', function() {
+	it('should render multiples rows with multiple text field for the given value plus empty row', function() {
 		comp = new MultiInput({
 			fieldsConfig: [{}, {}],
 			values: [['col1.1', 'col1.2'], ['col2.1', 'col2.2']]
 		});
-		assert.strictEqual(2, comp.element.childNodes.length);
+		assert.strictEqual(3, comp.element.childNodes.length);
 
 		let fields = getFieldsForRow(comp.element, 0);
 		assert.strictEqual(2, fields.length);
@@ -48,6 +54,11 @@ describe('MultiInput', function() {
 		assert.strictEqual(2, fields.length);
 		assert.strictEqual('col2.1', fields[0].value);
 		assert.strictEqual('col2.2', fields[1].value);
+
+		fields = getFieldsForRow(comp.element, 2);
+		assert.strictEqual(2, fields.length);
+		assert.strictEqual('', fields[0].value);
+		assert.strictEqual('', fields[1].value);
 	});
 
 	it('should add placeholders as specified in "fieldsConfig"', function() {
@@ -114,7 +125,7 @@ describe('MultiInput', function() {
 		dom.triggerEvent(lastField, 'input');
 
 		comp.once('stateSynced', function() {
-			assert.deepEqual([['foo'], ['bar'], ['last'], ['']], comp.values);
+			assert.deepEqual([['foo'], ['bar'], ['last'], []], comp.values);
 			assert.strictEqual(4, comp.element.childNodes.length);
 
 			lastField = getFieldsForRow(comp.element, 3)[0];

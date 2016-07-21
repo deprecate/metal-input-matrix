@@ -22,20 +22,6 @@ class MultiInput extends Component {
 	}
 
 	/**
-	 * Creates an empty array for a new row of field values.
-	 * @return {!Array}
-	 * @protected
-	 */
-	createValuesArr_() {
-		var arr = [];
-		var size = this.fieldsConfig.length;
-		for (var i = 0; i < size; i++) {
-			arr.push('');
-		}
-		return arr;
-	}
-
-	/**
 	 * Handles an `input` event from one of the text fields. Updates the values
 	 * and adds an extra field when necessary.
 	 * @param {!Event} event
@@ -44,13 +30,8 @@ class MultiInput extends Component {
 	handleInput_(event) {
 		const element = event.delegateTarget;
 		const fieldIndex = this.convertAttrToInt_(element, 'data-field-index');
-		let rowIndex = this.convertAttrToInt_(element, 'data-row-index');
+		const rowIndex = this.convertAttrToInt_(element, 'data-row-index');
 		this.values[rowIndex][fieldIndex] = element.value;
-
-		var last = rowIndex === this.values.length - 1;
-		if (last && !this.fieldsConfig[fieldIndex].disableDuplication) {
-			this.values.push(this.createValuesArr_());
-		}
 		this.values = this.values;
 	}
 
@@ -64,6 +45,31 @@ class MultiInput extends Component {
 		const index = this.convertAttrToInt_(element, 'data-row-index');
 		this.values.splice(index, 1);
 		this.values = this.values;
+	}
+
+	/**
+	 * Sets the `values` state property. If the last row contains at least one
+	 * non empty field that doesn't have `disableDuplication` set to true, a new
+	 * row will be added automatically here.
+	 * @param {!Array<!Array<string>} values
+	 * @return {!Array<!Array<string>}
+	 * @protected
+	 */
+	setValuesFn_(values) {
+		if (!values.length) {
+			values = [[]];
+		}
+
+		const lastRow = values[values.length - 1];
+		for (let i = 0; i < this.fieldsConfig.length; i++) {
+			var config = this.fieldsConfig[i];
+			if (lastRow[i] && lastRow[i] !== '' && !config.disableDuplication) {
+				values.push([]);
+				break;
+			}
+		}
+
+		return values;
 	}
 }
 Soy.register(MultiInput, templates);
@@ -86,14 +92,16 @@ MultiInput.STATE = {
 	},
 
 	/**
-	 * The values for each field in each rendered row.
+	 * The values for each field in each rendered row. For example, setting this
+	 * to [['foo1', 'bar1'], ['foo2', 'bar2']] will render two rows of two fields
+	 * each, plus an empty row (unless "disableDuplication" was is true in
+	 * `fieldsConfig`).
 	 * @type {!Array<!Array<*>>}
 	 */
 	values: {
+		setter: 'setValuesFn_',
 		validator: core.isArray,
-		valueFn: function() {
-			return [this.createValuesArr_()];
-		}
+		valueFn: () => []
 	}
 };
 

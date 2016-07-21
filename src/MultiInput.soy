@@ -8,14 +8,31 @@
 {template .render}
 	<div class="multi-input">
 		{let $fieldVals: $values ? $values : [[]] /}
+
+		{let $shouldAddRow kind="text"}
+			{call .shouldAddRow}
+				{param fieldsConfig: $fieldsConfig /}
+				{param values: $fieldVals[length($fieldVals) - 1] ?: [] /}
+			{/call}
+		{/let}
+
 		{foreach $rowVals in $fieldVals}
 			{call .row}
 				{param fieldsConfig : $fieldsConfig /}
-				{param last: index($rowVals) == (length($fieldVals) - 1) /}
+				{param last: (not $shouldAddRow) and index($rowVals) == (length($fieldVals) - 1) /}
 				{param rowIndex: index($rowVals) /}
 				{param rowVals: $rowVals /}
 			{/call}
 		{/foreach}
+
+		{if $shouldAddRow != ''}
+			{call .row}
+				{param fieldsConfig : $fieldsConfig /}
+				{param last: true /}
+				{param rowIndex: length($fieldVals) /}
+				{param rowVals: [] /}
+			{/call}
+		{/if}
 	</div>
 {/template}
 
@@ -71,4 +88,17 @@
 		name="{isNonnull($name) ? ($name + ($rowIndex + 1)) : ''}"
 		placeholder="{$placeholder ?: ''}"
 	/>
+{/template}
+
+/**
+ * @param fieldsConfig
+ * @param values
+ */
+{template .shouldAddRow kind="text"}
+	{foreach $config in $fieldsConfig}
+		{let $index: index($config) /}
+		{if (not $config.disableDuplication) and isNonnull($values[$index]) and $values[$index] != ''}
+			true
+		{/if}
+	{/foreach}
 {/template}
