@@ -5,13 +5,43 @@
 	<title>Demo: MultiInput</title>
 	<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
 	<script src="../build/globals/multi-input.js"></script>
+	<style>
+		.multi-input-fields {
+			margin-bottom: 20px;
+		}
+
+		.multi-input-field {
+			display: inline-block;
+			margin-right: 10px;
+			width: 40%
+		}
+
+		.multi-input-fields-left {
+			display: inline-block;
+			width: 90%;
+		}
+
+		.multi-input-fields-right {
+			display: inline-block;
+		}
+	</style>
 </head>
 <body>
 	<h1>MultiInput</h1>
 	<script type="text/javascript">
 		window.multiInput = new metal.MultiInput({
-			name: 'field',
-			placeholder: 'Name'
+			fieldsConfig: [
+				{
+					name: 'name',
+					placeholder: 'Name'
+				},
+				{
+					disableDuplication: true,
+					name: 'age',
+					placeholder: 'Age'
+				}
+			],
+			values: [['Maira', 26], ['', 12]]
 		});
 	</script>
 </body>

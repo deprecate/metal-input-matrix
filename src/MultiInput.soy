@@ -2,53 +2,48 @@
 
 /**
  * This renders the component's whole content.
- * @param? name
- * @param? placeholder
- * @param values
+ * @param fieldsConfig
+ * @param? values
  */
 {template .render}
 	<div class="multi-input">
-		{foreach $value in $values}
-			{call .field}
-				{param index: index($value) /}
-				{param name: $name /}
-				{param placeholder: $placeholder /}
-				{param value: $value /}
+		{let $fieldVals: $values ? $values : [[]] /}
+		{foreach $rowVals in $fieldVals}
+			{call .row}
+				{param fieldsConfig : $fieldsConfig /}
+				{param last: index($rowVals) == (length($fieldVals) - 1) /}
+				{param rowIndex: index($rowVals) /}
+				{param rowVals: $rowVals /}
 			{/call}
 		{/foreach}
-		{call .field}
-			{param name: $name /}
-			{param placeholder: $placeholder /}
-		{/call}
 	</div>
 {/template}
 
 /**
- * @param? index
- * @param? name
- * @param? placeholder
- * @param? value
+ * @param fieldsConfig
+ * @param last
+ * @param rowIndex
+ * @param? rowVals
  */
-{template .field}
-	<div class="multi-input-field">
-		<div class="multi-input-field-left">
-			<input
-				type="text"
-				value="{$value ?: ''}"
-				class="form-control"
-				data-index="{isNonnull($index) ? $index : -1}"
-				data-oninput="handleInput_"
-				name="{isNonnull($index) and isNonnull($name) ? ($name + ($index + 1)) : ''}"
-				placeholder="{$placeholder ?: ''}"
-			/>
+{template .row}
+	<div class="multi-input-fields">
+		<div class="multi-input-fields-left">
+			{foreach $config in $fieldsConfig}
+				{let $index: index($config) /}
+				{call .field data="$config"}
+					{param fieldIndex: $index /}
+					{param rowIndex: $rowIndex /}
+					{param value: $rowVals ? $rowVals[$index] : '' /}
+				{/call}
+			{/foreach}
 		</div>
-		<div class="multi-input-field-right">
-			{if isNonnull($index)}
+		<div class="multi-input-fields-right">
+			{if not $last}
 				<button
 					type="button"
 					class="close"
 					data-onclick="handleRemoveClick_"
-					data-index="{isNonnull($index) ? $index : -1}"
+					data-row-index="{$rowIndex}"
 					aria-label="Remove"
 					tabindex="-1">
 					<span aria-hidden="true">×</span>
@@ -56,4 +51,24 @@
 			{/if}
 		</div>
 	</div>
+{/template}
+
+/**
+ * @param fieldIndex
+ * @param? name
+ * @param? placeholder
+ * @param rowIndex
+ * @param value
+ */
+{template .field}
+	<input
+		type="text"
+		value="{$value}"
+		class="form-control multi-input-field"
+		data-field-index="{$fieldIndex}"
+		data-row-index="{$rowIndex}"
+		data-oninput="{'handleInput_'}"
+		name="{isNonnull($name) ? ($name + ($rowIndex + 1)) : ''}"
+		placeholder="{$placeholder ?: ''}"
+	/>
 {/template}

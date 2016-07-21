@@ -12,88 +12,155 @@ describe('MultiInput', function() {
 		}
 	});
 
-	it('should render a text field for each given value, plus an empty one', function() {
-		comp = new MultiInput({
-			values: ['foo', 'bar']
-		});
-
-		const element = comp.element;
-		assert.strictEqual(3, element.childNodes.length);
-		assert.strictEqual('foo', getFieldFromWrapper(element.childNodes[0]).value);
-		assert.strictEqual('bar', getFieldFromWrapper(element.childNodes[1]).value);
-		assert.strictEqual('', getFieldFromWrapper(element.childNodes[2]).value);
-	});
-
-	it('should render a single empty field by default', function() {
+	it('should render a single row with a single empty field by default', function() {
 		comp = new MultiInput();
+		assert.strictEqual(1, comp.element.childNodes.length);
 
-		const element = comp.element;
-		assert.strictEqual(1, element.childNodes.length);
-		assert.strictEqual('', getFieldFromWrapper(element.childNodes[0]).value);
+		let fields = getFieldsForRow(comp.element, 0);
+		assert.strictEqual(1, fields.length);
+		assert.strictEqual('', fields[0].value);
 	});
 
-	it('should add placeholder to all fields', function() {
+	it('should render a single row with a single text field for the given value', function() {
 		comp = new MultiInput({
-			placeholder: 'Test',
-			values: ['foo', 'bar']
+			values: [['foo']]
 		});
+		assert.strictEqual(1, comp.element.childNodes.length);
 
-		const children = comp.element.childNodes;
-		assert.strictEqual('Test', getFieldFromWrapper(children[0]).placeholder);
-		assert.strictEqual('Test', getFieldFromWrapper(children[1]).placeholder);
-		assert.strictEqual('Test', getFieldFromWrapper(children[2]).placeholder);
+		let fields = getFieldsForRow(comp.element, 0);
+		assert.strictEqual(1, fields.length);
+		assert.strictEqual('foo', fields[0].value);
 	});
 
-	it('should add name to all fields except the last one', function() {
+	it('should render multiples rows with multiple text field for the given value', function() {
 		comp = new MultiInput({
-			name: 'test',
-			values: ['foo', 'bar']
+			fieldsConfig: [{}, {}],
+			values: [['col1.1', 'col1.2'], ['col2.1', 'col2.2']]
 		});
+		assert.strictEqual(2, comp.element.childNodes.length);
 
-		const children = comp.element.childNodes;
-		assert.strictEqual('test1', getFieldFromWrapper(children[0]).name);
-		assert.strictEqual('test2', getFieldFromWrapper(children[1]).name);
-		assert.strictEqual('', getFieldFromWrapper(children[2]).name);
+		let fields = getFieldsForRow(comp.element, 0);
+		assert.strictEqual(2, fields.length);
+		assert.strictEqual('col1.1', fields[0].value);
+		assert.strictEqual('col1.2', fields[1].value);
+
+		fields = getFieldsForRow(comp.element, 1);
+		assert.strictEqual(2, fields.length);
+		assert.strictEqual('col2.1', fields[0].value);
+		assert.strictEqual('col2.2', fields[1].value);
 	});
 
-	it('should add another empty field if the last one is typed on', function(done) {
+	it('should add placeholders as specified in "fieldsConfig"', function() {
 		comp = new MultiInput({
-			values: ['foo', 'bar']
+			fieldsConfig: [
+				{
+					placeholder: 'Placeholder 1'
+				},
+				{
+					placeholder: 'Placeholder 2'
+				}
+			],
+			values: [[], []]
 		});
 
-		let lastField = getFieldFromWrapper(comp.element.childNodes[2]);
+		assert.strictEqual(2, comp.element.childNodes.length);
+
+		let fields = getFieldsForRow(comp.element, 0);
+		assert.strictEqual(2, fields.length);
+		assert.strictEqual('Placeholder 1', fields[0].placeholder);
+		assert.strictEqual('Placeholder 2', fields[1].placeholder);
+
+		fields = getFieldsForRow(comp.element, 1);
+		assert.strictEqual(2, fields.length);
+		assert.strictEqual('Placeholder 1', fields[0].placeholder);
+		assert.strictEqual('Placeholder 2', fields[1].placeholder);
+	});
+
+	it('should add names as specified in "fieldsConfig"', function() {
+		comp = new MultiInput({
+			fieldsConfig: [
+				{
+					name: 'address'
+				},
+				{
+					name: 'age'
+				},
+				{}
+			],
+			values: [[], []]
+		});
+		assert.strictEqual(2, comp.element.childNodes.length);
+
+		let fields = getFieldsForRow(comp.element, 0);
+		assert.strictEqual(3, fields.length);
+		assert.strictEqual('address1', fields[0].getAttribute('name'));
+		assert.strictEqual('age1', fields[1].getAttribute('name'));
+		assert.strictEqual('', fields[2].getAttribute('name'));
+
+		fields = getFieldsForRow(comp.element, 1);
+		assert.strictEqual(3, fields.length);
+		assert.strictEqual('address2', fields[0].getAttribute('name'));
+		assert.strictEqual('age2', fields[1].getAttribute('name'));
+		assert.strictEqual('', fields[2].getAttribute('name'));
+	});
+
+	it('should add new row with empty fields if field in last row is typed on', function(done) {
+		comp = new MultiInput({
+			values: [['foo'], ['bar'], []]
+		});
+
+		let lastField = getFieldsForRow(comp.element, 2)[0];
 		lastField.value = 'last';
 		dom.triggerEvent(lastField, 'input');
 
 		comp.once('stateSynced', function() {
-			assert.deepEqual(['foo', 'bar', 'last'], comp.values);
+			assert.deepEqual([['foo'], ['bar'], ['last'], ['']], comp.values);
 			assert.strictEqual(4, comp.element.childNodes.length);
 
-			lastField = getFieldFromWrapper(comp.element.childNodes[3]);
+			lastField = getFieldsForRow(comp.element, 3)[0];
 			assert.strictEqual('', lastField.value);
 			done();
 		});
 	});
 
-	it('should not add another text field if field before the last one is typed on', function(done) {
+	it('should not add new row with empty fields if field in last row is typed on', function(done) {
 		comp = new MultiInput({
-			values: ['foo', 'bar']
+			values: [['foo'], [], []]
 		});
 
-		let lastField = getFieldFromWrapper(comp.element.childNodes[1]);
-		lastField.value = 'bar2';
+		let lastField = getFieldsForRow(comp.element, 1)[0];
+		lastField.value = 'bar';
 		dom.triggerEvent(lastField, 'input');
 
 		comp.once('stateSynced', function() {
-			assert.deepEqual(['foo', 'bar2'], comp.values);
+			assert.deepEqual([['foo'], ['bar'], []], comp.values);
 			assert.strictEqual(3, comp.element.childNodes.length);
 			done();
 		});
 	});
 
-	it('should render a remove button for each field except the last one', function() {
+	it('should not add new row with empty fields if field with "disableDuplication" is typed on', function(done) {
 		comp = new MultiInput({
-			values: ['foo', 'bar']
+			fieldsConfig: [{
+				disableDuplication: true
+			}],
+			values: [['foo'], ['bar'], []]
+		});
+
+		let lastField = getFieldsForRow(comp.element, 2)[0];
+		lastField.value = 'last';
+		dom.triggerEvent(lastField, 'input');
+
+		comp.once('stateSynced', function() {
+			assert.deepEqual([['foo'], ['bar'], ['last']], comp.values);
+			assert.strictEqual(3, comp.element.childNodes.length);
+			done();
+		});
+	});
+
+	it('should render a remove button for each row except the last one', function() {
+		comp = new MultiInput({
+			values: [['foo'], ['bar'], []]
 		});
 
 		const children = comp.element.children;
@@ -104,20 +171,20 @@ describe('MultiInput', function() {
 
 	it('should remove field when the remove button is clicked', function(done) {
 		comp = new MultiInput({
-			values: ['foo', 'bar']
+			values: [['foo'], ['bar'], []]
 		});
 
 		let removeButton = comp.element.childNodes[0].querySelector('button');
 		dom.triggerEvent(removeButton, 'click');
 
 		comp.once('stateSynced', function() {
-			assert.deepEqual(['bar'], comp.values);
+			assert.deepEqual([['bar'], []], comp.values);
 			assert.strictEqual(2, comp.element.childNodes.length);
 			done();
 		});
 	});
 
-	function getFieldFromWrapper(wrapper) {
-		return wrapper.childNodes[0].childNodes[0];
+	function getFieldsForRow(parent, rowIndex) {
+		return parent.childNodes[rowIndex].childNodes[0].childNodes;
 	}
 });
