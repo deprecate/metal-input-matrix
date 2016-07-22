@@ -31,8 +31,9 @@ class InputMatrix extends Component {
 		const element = event.delegateTarget;
 		const fieldIndex = this.convertAttrToInt_(element, 'data-field-index');
 		const rowIndex = this.convertAttrToInt_(element, 'data-row-index');
-		this.values[rowIndex][fieldIndex] = element.value;
-		this.values = this.values;
+		this.fields[rowIndex][fieldIndex] = this.fields[rowIndex][fieldIndex] || {};
+		this.fields[rowIndex][fieldIndex].value = element.value;
+		this.fields = this.fields;
 	}
 
 	/**
@@ -43,38 +44,52 @@ class InputMatrix extends Component {
 	handleRemoveClick_(event) {
 		const element = event.delegateTarget;
 		const index = this.convertAttrToInt_(element, 'data-row-index');
-		this.values.splice(index, 1);
-		this.values = this.values;
+		this.fields.splice(index, 1);
+		this.fields = this.fields;
 	}
 
 	/**
-	 * Sets the `values` state property. If the last row contains at least one
+	 * Sets the `fields` state property. If the last row contains at least one
 	 * non empty field that doesn't have `disableDuplication` set to true, a new
 	 * row will be added automatically here.
-	 * @param {!Array<!Array<string>} values
+	 * @param {!Array<!Array<string>} fields
 	 * @return {!Array<!Array<string>}
 	 * @protected
 	 */
-	setValuesFn_(values) {
-		if (!values.length) {
-			values = [[]];
+	setFieldsFn_(fields) {
+		if (!fields.length) {
+			fields = [[]];
 		}
 
-		const lastRow = values[values.length - 1];
+		const lastRow = fields[fields.length - 1];
 		for (let i = 0; i < this.fieldsConfig.length; i++) {
 			var config = this.fieldsConfig[i];
-			if (lastRow[i] && lastRow[i] !== '' && !config.disableDuplication) {
-				values.push([]);
+			var hasValue = lastRow[i] && lastRow[i].value && lastRow[i].value !== '';
+			if (hasValue && !config.disableDuplication) {
+				fields.push([]);
 				break;
 			}
 		}
 
-		return values;
+		return fields;
 	}
 }
 Soy.register(InputMatrix, templates);
 
 InputMatrix.STATE = {
+	/**
+	 * Information for each rendered field, in each row. Each field object can
+	 * contain the following data:
+	 * - {string=} value The field's current value
+	 * - {string-} error The error message to be rendered for the field.
+	 * @type {!Array<!Array<!Object>>}
+	 */
+	fields: {
+		setter: 'setFieldsFn_',
+		validator: core.isArray,
+		valueFn: () => []
+	},
+
 	/**
 	 * An array of objects representing fields that should be rendered together.
 	 * Each field config can have one of the following configuration options:
@@ -90,19 +105,6 @@ InputMatrix.STATE = {
 	fieldsConfig: {
 		validator: core.isArray,
 		valueFn: () => [{}]
-	},
-
-	/**
-	 * The values for each field in each rendered row. For example, setting this
-	 * to [['foo1', 'bar1'], ['foo2', 'bar2']] will render two rows of two fields
-	 * each, plus an empty row (unless "disableDuplication" was is true in
-	 * `fieldsConfig`).
-	 * @type {!Array<!Array<*>>}
-	 */
-	values: {
-		setter: 'setValuesFn_',
-		validator: core.isArray,
-		valueFn: () => []
 	}
 };
 

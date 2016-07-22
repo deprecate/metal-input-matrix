@@ -2,8 +2,8 @@
 
 /**
  * This renders the component's whole content.
+ * @param? fields
  * @param fieldsConfig
- * @param? values
  */
 {template .render}
 	<div class="input-matrix">
@@ -13,21 +13,21 @@
 			{/foreach}
 		</div>
 
-		{let $fieldVals: $values ? $values : [[]] /}
+		{let $fieldObjs: $fields ? $fields : [[]] /}
 
 		{let $shouldAddRow kind="text"}
 			{call .shouldAddRow}
+				{param fields: $fieldObjs[length($fieldObjs) - 1] ?: [] /}
 				{param fieldsConfig: $fieldsConfig /}
-				{param values: $fieldVals[length($fieldVals) - 1] ?: [] /}
 			{/call}
 		{/let}
 
-		{foreach $rowVals in $fieldVals}
+		{foreach $rowFields in $fieldObjs}
 			{call .row}
 				{param fieldsConfig : $fieldsConfig /}
-				{param last: (not $shouldAddRow) and index($rowVals) == (length($fieldVals) - 1) /}
-				{param rowIndex: index($rowVals) /}
-				{param rowVals: $rowVals /}
+				{param last: (not $shouldAddRow) and index($rowFields) == (length($fieldObjs) - 1) /}
+				{param rowFields: $rowFields /}
+				{param rowIndex: index($rowFields) /}
 			{/call}
 		{/foreach}
 
@@ -35,8 +35,8 @@
 			{call .row}
 				{param fieldsConfig : $fieldsConfig /}
 				{param last: true /}
-				{param rowIndex: length($fieldVals) /}
-				{param rowVals: [] /}
+				{param rowFields: [] /}
+				{param rowIndex: length($fieldObjs) /}
 			{/call}
 		{/if}
 	</div>
@@ -45,8 +45,8 @@
 /**
  * @param fieldsConfig
  * @param last
+ * @param? rowFields
  * @param rowIndex
- * @param? rowVals
  */
 {template .row}
 	<div class="input-matrix-fields">
@@ -54,9 +54,9 @@
 			{foreach $config in $fieldsConfig}
 				{let $index: index($config) /}
 				{call .field data="$config"}
+					{param field: $rowFields ? $rowFields[$index] : null /}
 					{param fieldIndex: $index /}
 					{param rowIndex: $rowIndex /}
-					{param value: $rowVals ? $rowVals[$index] : '' /}
 				{/call}
 			{/foreach}
 		</div>
@@ -77,16 +77,16 @@
 {/template}
 
 /**
+ * @param? field
  * @param fieldIndex
  * @param? name
  * @param? placeholder
  * @param rowIndex
- * @param value
  */
 {template .field}
 	<input
 		type="text"
-		value="{$value ?: ''}"
+		value="{$field and $field.value ? $field.value : ''}"
 		class="form-control input-matrix-field"
 		data-field-index="{$fieldIndex}"
 		data-row-index="{$rowIndex}"
@@ -97,13 +97,14 @@
 {/template}
 
 /**
+ * @param fields
  * @param fieldsConfig
- * @param values
  */
 {template .shouldAddRow kind="text"}
 	{foreach $config in $fieldsConfig}
 		{let $index: index($config) /}
-		{if (not $config.disableDuplication) and isNonnull($values[$index]) and $values[$index] != ''}
+		{let $hasValue: isNonnull($fields[$index]) and isNonnull($fields[$index].value) and $fields[$index].value != '' /}
+		{if (not $config.disableDuplication) and $hasValue}
 			true
 		{/if}
 	{/foreach}

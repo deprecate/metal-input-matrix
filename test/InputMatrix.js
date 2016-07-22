@@ -24,7 +24,9 @@ describe('InputMatrix', function() {
 
 	it('should render a single text field for the given value plus an empty one below', function() {
 		comp = new InputMatrix({
-			values: [['foo']]
+			fields: [[{
+				value: 'foo'
+			}]]
 		});
 		assert.strictEqual(3, comp.element.childNodes.length);
 
@@ -36,13 +38,36 @@ describe('InputMatrix', function() {
 		assert.strictEqual(1, fields.length);
 		assert.strictEqual('', fields[0].value);
 
-		assert.deepEqual([['foo'], []], comp.values);
+		var expectedFields = [
+			[{
+				value: 'foo'
+			}],
+			[]
+		];
+		assert.deepEqual(expectedFields, comp.fields);
 	});
 
 	it('should render multiples rows with multiple text field for the given value plus empty row', function() {
 		comp = new InputMatrix({
-			fieldsConfig: [{}, {}],
-			values: [['col1.1', 'col1.2'], ['col2.1', 'col2.2']]
+			fields: [
+				[
+					{
+						value: 'col1.1'
+					},
+					{
+						value: 'col1.2'
+					}
+				],
+				[
+					{
+						value: 'col2.1'
+					},
+					{
+						value: 'col2.2'
+					}
+				]
+			],
+			fieldsConfig: [{}, {}]
 		});
 		assert.strictEqual(4, comp.element.childNodes.length);
 
@@ -64,6 +89,7 @@ describe('InputMatrix', function() {
 
 	it('should add labels as specified in "fieldsConfig"', function() {
 		comp = new InputMatrix({
+			fields: [[], []],
 			fieldsConfig: [
 				{
 					label: 'Label 1'
@@ -71,8 +97,7 @@ describe('InputMatrix', function() {
 				{
 					label: 'Label 2'
 				}
-			],
-			values: [[], []]
+			]
 		});
 
 		const labels = comp.element.childNodes[0].childNodes;
@@ -83,6 +108,7 @@ describe('InputMatrix', function() {
 
 	it('should add placeholders as specified in "fieldsConfig"', function() {
 		comp = new InputMatrix({
+			fields: [[], []],
 			fieldsConfig: [
 				{
 					placeholder: 'Placeholder 1'
@@ -90,8 +116,7 @@ describe('InputMatrix', function() {
 				{
 					placeholder: 'Placeholder 2'
 				}
-			],
-			values: [[], []]
+			]
 		});
 
 		assert.strictEqual(3, comp.element.childNodes.length);
@@ -109,6 +134,7 @@ describe('InputMatrix', function() {
 
 	it('should add names as specified in "fieldsConfig"', function() {
 		comp = new InputMatrix({
+			fields: [[], []],
 			fieldsConfig: [
 				{
 					name: 'address'
@@ -117,8 +143,7 @@ describe('InputMatrix', function() {
 					name: 'age'
 				},
 				{}
-			],
-			values: [[], []]
+			]
 		});
 		assert.strictEqual(3, comp.element.childNodes.length);
 
@@ -137,7 +162,15 @@ describe('InputMatrix', function() {
 
 	it('should add new row with empty fields if field in last row is typed on', function(done) {
 		comp = new InputMatrix({
-			values: [['foo'], ['bar'], []]
+			fields: [
+				[{
+					value: 'foo'
+				}],
+				[{
+					value: 'bar'
+				}],
+				[]
+			]
 		});
 
 		let lastField = getFieldsForRow(comp.element, 2)[0];
@@ -145,7 +178,19 @@ describe('InputMatrix', function() {
 		dom.triggerEvent(lastField, 'input');
 
 		comp.once('stateSynced', function() {
-			assert.deepEqual([['foo'], ['bar'], ['last'], []], comp.values);
+			var expectedFields = [
+				[{
+					value: 'foo'
+				}],
+				[{
+					value: 'bar'
+				}],
+				[{
+					value: 'last'
+				}],
+				[]
+			];
+			assert.deepEqual(expectedFields, comp.fields);
 			assert.strictEqual(5, comp.element.childNodes.length);
 
 			lastField = getFieldsForRow(comp.element, 3)[0];
@@ -156,7 +201,13 @@ describe('InputMatrix', function() {
 
 	it('should not add new row with empty fields if field in last row is typed on', function(done) {
 		comp = new InputMatrix({
-			values: [['foo'], [], []]
+			fields: [
+				[{
+					value: 'foo'
+				}],
+				[],
+				[]
+			]
 		});
 
 		let lastField = getFieldsForRow(comp.element, 1)[0];
@@ -164,7 +215,16 @@ describe('InputMatrix', function() {
 		dom.triggerEvent(lastField, 'input');
 
 		comp.once('stateSynced', function() {
-			assert.deepEqual([['foo'], ['bar'], []], comp.values);
+			var expectedFields = [
+				[{
+					value: 'foo'
+				}],
+				[{
+					value: 'bar'
+				}],
+				[]
+			];
+			assert.deepEqual(expectedFields, comp.fields);
 			assert.strictEqual(4, comp.element.childNodes.length);
 			done();
 		});
@@ -172,10 +232,18 @@ describe('InputMatrix', function() {
 
 	it('should not add new row with empty fields if field with "disableDuplication" is typed on', function(done) {
 		comp = new InputMatrix({
+			fields: [
+				[{
+					value: 'foo'
+				}],
+				[{
+					value: 'bar'
+				}],
+				[]
+			],
 			fieldsConfig: [{
 				disableDuplication: true
-			}],
-			values: [['foo'], ['bar'], []]
+			}]
 		});
 
 		let lastField = getFieldsForRow(comp.element, 2)[0];
@@ -183,7 +251,18 @@ describe('InputMatrix', function() {
 		dom.triggerEvent(lastField, 'input');
 
 		comp.once('stateSynced', function() {
-			assert.deepEqual([['foo'], ['bar'], ['last']], comp.values);
+			var expectedFields = [
+				[{
+					value: 'foo'
+				}],
+				[{
+					value: 'bar'
+				}],
+				[{
+					value: 'last'
+				}]
+			];
+			assert.deepEqual(expectedFields, comp.fields);
 			assert.strictEqual(4, comp.element.childNodes.length);
 			done();
 		});
@@ -191,7 +270,15 @@ describe('InputMatrix', function() {
 
 	it('should render a remove button for each row except the last one', function() {
 		comp = new InputMatrix({
-			values: [['foo'], ['bar'], []]
+			fields: [
+				[{
+					value: 'foo'
+				}],
+				[{
+					value: 'bar'
+				}],
+				[]
+			]
 		});
 
 		const children = comp.element.children;
@@ -202,14 +289,28 @@ describe('InputMatrix', function() {
 
 	it('should remove field when the remove button is clicked', function(done) {
 		comp = new InputMatrix({
-			values: [['foo'], ['bar'], []]
+			fields: [
+				[{
+					value: 'foo'
+				}],
+				[{
+					value: 'bar'
+				}],
+				[]
+			]
 		});
 
 		let removeButton = comp.element.childNodes[1].querySelector('button');
 		dom.triggerEvent(removeButton, 'click');
 
 		comp.once('stateSynced', function() {
-			assert.deepEqual([['bar'], []], comp.values);
+			var expectedFields = [
+				[{
+					value: 'bar'
+				}],
+				[]
+			];
+			assert.deepEqual(expectedFields, comp.fields);
 			assert.strictEqual(3, comp.element.childNodes.length);
 			done();
 		});
