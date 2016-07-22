@@ -84,16 +84,22 @@
  * @param rowIndex
  */
 {template .field}
-	<input
-		type="text"
-		value="{$field and $field.value ? $field.value : ''}"
-		class="form-control input-matrix-field"
-		data-field-index="{$fieldIndex}"
-		data-row-index="{$rowIndex}"
-		data-oninput="{'handleInput_'}"
-		name="{isNonnull($name) ? ($name + ($rowIndex + 1)) : ''}"
-		placeholder="{$placeholder ?: ''}"
-	/>
+	{let $hasError: $field and $field.error and $field.error != '' /}
+	<div class="form-group {$hasError ? 'has-error' : ''}">
+		<input
+			type="text"
+			value="{$field and $field.value ? $field.value : ''}"
+			class="form-control input-matrix-field"
+			data-field-index="{$fieldIndex}"
+			data-row-index="{$rowIndex}"
+			data-oninput="{'handleInput_'}"
+			name="{isNonnull($name) ? ($name + ($rowIndex + 1)) : ''}"
+			placeholder="{$placeholder ?: ''}"
+		/>
+		{if $hasError}
+			<p class="help-block">{$field.error}</p>
+		{/if}
+	</div>
 {/template}
 
 /**

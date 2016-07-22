@@ -47,6 +47,22 @@ describe('InputMatrix', function() {
 		assert.deepEqual(expectedFields, comp.fields);
 	});
 
+	it('should render error messages when given', function() {
+		comp = new InputMatrix({
+			fields: [[{
+				error: 'Test error message'
+			}]]
+		});
+		assert.strictEqual(2, comp.element.childNodes.length);
+
+		let fields = getFieldsForRow(comp.element, 0);
+		assert.ok(dom.hasClass(fields[0].parentNode, 'has-error'));
+
+		var errorBox = fields[0].nextSibling;
+		assert.ok(errorBox);
+		assert.strictEqual('Test error message', errorBox.textContent);
+	});
+
 	it('should render multiples rows with multiple text field for the given value plus empty row', function() {
 		comp = new InputMatrix({
 			fields: [
@@ -317,6 +333,6 @@ describe('InputMatrix', function() {
 	});
 
 	function getFieldsForRow(parent, rowIndex) {
-		return parent.childNodes[rowIndex + 1].childNodes[0].childNodes;
+		return parent.childNodes[rowIndex + 1].querySelectorAll('input');
 	}
 });
