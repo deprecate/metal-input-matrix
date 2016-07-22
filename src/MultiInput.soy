@@ -3,18 +3,14 @@
 /**
  * This renders the component's whole content.
  * @param fieldsConfig
- * @param? labels
  * @param? values
  */
 {template .render}
 	<div class="multi-input">
 		<div class="multi-input-labels">
-			{if $labels[0] != ''}
-				<label class="multi-input-label">{$labels[0]}</label>
-			{/if}
-			{if $labels[1] != ''}
-				<label class="multi-input-label">{$labels[1]}</label>
-			{/if}
+			{foreach $config in $fieldsConfig}
+				<label class="multi-input-label">{$config.label ?: ''}</label>
+			{/foreach}
 		</div>
 
 		{let $fieldVals: $values ? $values : [[]] /}

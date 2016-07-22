@@ -81,6 +81,7 @@ MultiInput.STATE = {
 	 * - {boolean=} disableDuplication Optional flag indicating that typing on
 	 *     this field should not cause another row of fields to be created even if
 	 *     it was on the last row.
+	 * - {string=} label Optional label for the field.
 	 * - {string=} name Optional field name, which will have a counter suffix
 	 *     indicating its row position.
 	 * - {string=} placeholder Optional placeholder for the field.
@@ -89,14 +90,6 @@ MultiInput.STATE = {
 	fieldsConfig: {
 		validator: core.isArray,
 		valueFn: () => [{}]
-	},
-
-	/**
-	 * The labels for each field group.
-	 * @type {Array}
-	 */
-	labels: {
-		validator: core.isArray
 	},
 
 	/**
