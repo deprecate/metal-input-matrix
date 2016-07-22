@@ -90,7 +90,7 @@
 {template .field}
 	<input
 		type="text"
-		value="{$value}"
+		value="{$value ?: ''}"
 		class="form-control multi-input-field"
 		data-field-index="{$fieldIndex}"
 		data-row-index="{$rowIndex}"
