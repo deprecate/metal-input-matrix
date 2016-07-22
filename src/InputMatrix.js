@@ -1,7 +1,7 @@
 'use strict';
 
 import core from 'metal';
-import templates from './MultiInput.soy.js';
+import templates from './InputMatrix.soy.js';
 import Component from 'metal-component';
 import Soy from 'metal-soy';
 
@@ -9,7 +9,7 @@ import Soy from 'metal-soy';
  * This component automatically adds new fields to guarantee that there will
  * always be an empty field at the end of the list.
  */
-class MultiInput extends Component {
+class InputMatrix extends Component {
 	/**
 	 * Converts the specified element attribute to an integer.
 	 * @param {!Element} element
@@ -72,9 +72,9 @@ class MultiInput extends Component {
 		return values;
 	}
 }
-Soy.register(MultiInput, templates);
+Soy.register(InputMatrix, templates);
 
-MultiInput.STATE = {
+InputMatrix.STATE = {
 	/**
 	 * An array of objects representing fields that should be rendered together.
 	 * Each field config can have one of the following configuration options:
@@ -106,4 +106,4 @@ MultiInput.STATE = {
 	}
 };
 
-export default MultiInput;
+export default InputMatrix;

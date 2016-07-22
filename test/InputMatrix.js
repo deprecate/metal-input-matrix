@@ -1,9 +1,9 @@
 'use strict';
 
 import dom from 'metal-dom';
-import MultiInput from '../src/MultiInput';
+import InputMatrix from '../src/InputMatrix';
 
-describe('MultiInput', function() {
+describe('InputMatrix', function() {
 	let comp;
 
 	afterEach(function() {
@@ -13,9 +13,9 @@ describe('MultiInput', function() {
 	});
 
 	it('should render a single row with a single empty field by default', function() {
-		comp = new MultiInput();
+		comp = new InputMatrix();
 		assert.strictEqual(2, comp.element.childNodes.length);
-		assert.ok(dom.hasClass(comp.element.childNodes[0], 'multi-input-labels'));
+		assert.ok(dom.hasClass(comp.element.childNodes[0], 'input-matrix-labels'));
 
 		let fields = getFieldsForRow(comp.element, 0);
 		assert.strictEqual(1, fields.length);
@@ -23,7 +23,7 @@ describe('MultiInput', function() {
 	});
 
 	it('should render a single text field for the given value plus an empty one below', function() {
-		comp = new MultiInput({
+		comp = new InputMatrix({
 			values: [['foo']]
 		});
 		assert.strictEqual(3, comp.element.childNodes.length);
@@ -40,7 +40,7 @@ describe('MultiInput', function() {
 	});
 
 	it('should render multiples rows with multiple text field for the given value plus empty row', function() {
-		comp = new MultiInput({
+		comp = new InputMatrix({
 			fieldsConfig: [{}, {}],
 			values: [['col1.1', 'col1.2'], ['col2.1', 'col2.2']]
 		});
@@ -63,7 +63,7 @@ describe('MultiInput', function() {
 	});
 
 	it('should add labels as specified in "fieldsConfig"', function() {
-		comp = new MultiInput({
+		comp = new InputMatrix({
 			fieldsConfig: [
 				{
 					label: 'Label 1'
@@ -82,7 +82,7 @@ describe('MultiInput', function() {
 	});
 
 	it('should add placeholders as specified in "fieldsConfig"', function() {
-		comp = new MultiInput({
+		comp = new InputMatrix({
 			fieldsConfig: [
 				{
 					placeholder: 'Placeholder 1'
@@ -108,7 +108,7 @@ describe('MultiInput', function() {
 	});
 
 	it('should add names as specified in "fieldsConfig"', function() {
-		comp = new MultiInput({
+		comp = new InputMatrix({
 			fieldsConfig: [
 				{
 					name: 'address'
@@ -136,7 +136,7 @@ describe('MultiInput', function() {
 	});
 
 	it('should add new row with empty fields if field in last row is typed on', function(done) {
-		comp = new MultiInput({
+		comp = new InputMatrix({
 			values: [['foo'], ['bar'], []]
 		});
 
@@ -155,7 +155,7 @@ describe('MultiInput', function() {
 	});
 
 	it('should not add new row with empty fields if field in last row is typed on', function(done) {
-		comp = new MultiInput({
+		comp = new InputMatrix({
 			values: [['foo'], [], []]
 		});
 
@@ -171,7 +171,7 @@ describe('MultiInput', function() {
 	});
 
 	it('should not add new row with empty fields if field with "disableDuplication" is typed on', function(done) {
-		comp = new MultiInput({
+		comp = new InputMatrix({
 			fieldsConfig: [{
 				disableDuplication: true
 			}],
@@ -190,7 +190,7 @@ describe('MultiInput', function() {
 	});
 
 	it('should render a remove button for each row except the last one', function() {
-		comp = new MultiInput({
+		comp = new InputMatrix({
 			values: [['foo'], ['bar'], []]
 		});
 
@@ -201,7 +201,7 @@ describe('MultiInput', function() {
 	});
 
 	it('should remove field when the remove button is clicked', function(done) {
-		comp = new MultiInput({
+		comp = new InputMatrix({
 			values: [['foo'], ['bar'], []]
 		});
 

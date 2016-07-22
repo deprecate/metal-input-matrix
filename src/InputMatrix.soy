@@ -1,4 +1,4 @@
-{namespace MultiInput}
+{namespace InputMatrix}
 
 /**
  * This renders the component's whole content.
@@ -6,10 +6,10 @@
  * @param? values
  */
 {template .render}
-	<div class="multi-input">
-		<div class="multi-input-labels">
+	<div class="input-matrix">
+		<div class="input-matrix-labels">
 			{foreach $config in $fieldsConfig}
-				<label class="multi-input-label">{$config.label ?: ''}</label>
+				<label class="input-matrix-label">{$config.label ?: ''}</label>
 			{/foreach}
 		</div>
 
@@ -49,8 +49,8 @@
  * @param? rowVals
  */
 {template .row}
-	<div class="multi-input-fields">
-		<div class="multi-input-fields-left">
+	<div class="input-matrix-fields">
+		<div class="input-matrix-fields-left">
 			{foreach $config in $fieldsConfig}
 				{let $index: index($config) /}
 				{call .field data="$config"}
@@ -60,7 +60,7 @@
 				{/call}
 			{/foreach}
 		</div>
-		<div class="multi-input-fields-right">
+		<div class="input-matrix-fields-right">
 			{if not $last}
 				<button
 					type="button"
@@ -87,7 +87,7 @@
 	<input
 		type="text"
 		value="{$value ?: ''}"
-		class="form-control multi-input-field"
+		class="form-control input-matrix-field"
 		data-field-index="{$fieldIndex}"
 		data-row-index="{$rowIndex}"
 		data-oninput="{'handleInput_'}"
