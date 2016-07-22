@@ -14,7 +14,8 @@ describe('MultiInput', function() {
 
 	it('should render a single row with a single empty field by default', function() {
 		comp = new MultiInput();
-		assert.strictEqual(1, comp.element.childNodes.length);
+		assert.strictEqual(2, comp.element.childNodes.length);
+		assert.ok(dom.hasClass(comp.element.childNodes[0], 'multi-input-labels'));
 
 		let fields = getFieldsForRow(comp.element, 0);
 		assert.strictEqual(1, fields.length);
@@ -25,7 +26,7 @@ describe('MultiInput', function() {
 		comp = new MultiInput({
 			values: [['foo']]
 		});
-		assert.strictEqual(2, comp.element.childNodes.length);
+		assert.strictEqual(3, comp.element.childNodes.length);
 
 		let fields = getFieldsForRow(comp.element, 0);
 		assert.strictEqual(1, fields.length);
@@ -43,7 +44,7 @@ describe('MultiInput', function() {
 			fieldsConfig: [{}, {}],
 			values: [['col1.1', 'col1.2'], ['col2.1', 'col2.2']]
 		});
-		assert.strictEqual(3, comp.element.childNodes.length);
+		assert.strictEqual(4, comp.element.childNodes.length);
 
 		let fields = getFieldsForRow(comp.element, 0);
 		assert.strictEqual(2, fields.length);
@@ -61,6 +62,25 @@ describe('MultiInput', function() {
 		assert.strictEqual('', fields[1].value);
 	});
 
+	it('should add labels as specified in "fieldsConfig"', function() {
+		comp = new MultiInput({
+			fieldsConfig: [
+				{
+					label: 'Label 1'
+				},
+				{
+					label: 'Label 2'
+				}
+			],
+			values: [[], []]
+		});
+
+		const labels = comp.element.childNodes[0].childNodes;
+		assert.strictEqual(2, labels.length);
+		assert.strictEqual('Label 1', labels[0].textContent);
+		assert.strictEqual('Label 2', labels[1].textContent);
+	});
+
 	it('should add placeholders as specified in "fieldsConfig"', function() {
 		comp = new MultiInput({
 			fieldsConfig: [
@@ -74,7 +94,7 @@ describe('MultiInput', function() {
 			values: [[], []]
 		});
 
-		assert.strictEqual(2, comp.element.childNodes.length);
+		assert.strictEqual(3, comp.element.childNodes.length);
 
 		let fields = getFieldsForRow(comp.element, 0);
 		assert.strictEqual(2, fields.length);
@@ -100,7 +120,7 @@ describe('MultiInput', function() {
 			],
 			values: [[], []]
 		});
-		assert.strictEqual(2, comp.element.childNodes.length);
+		assert.strictEqual(3, comp.element.childNodes.length);
 
 		let fields = getFieldsForRow(comp.element, 0);
 		assert.strictEqual(3, fields.length);
@@ -126,7 +146,7 @@ describe('MultiInput', function() {
 
 		comp.once('stateSynced', function() {
 			assert.deepEqual([['foo'], ['bar'], ['last'], []], comp.values);
-			assert.strictEqual(4, comp.element.childNodes.length);
+			assert.strictEqual(5, comp.element.childNodes.length);
 
 			lastField = getFieldsForRow(comp.element, 3)[0];
 			assert.strictEqual('', lastField.value);
@@ -145,7 +165,7 @@ describe('MultiInput', function() {
 
 		comp.once('stateSynced', function() {
 			assert.deepEqual([['foo'], ['bar'], []], comp.values);
-			assert.strictEqual(3, comp.element.childNodes.length);
+			assert.strictEqual(4, comp.element.childNodes.length);
 			done();
 		});
 	});
@@ -164,7 +184,7 @@ describe('MultiInput', function() {
 
 		comp.once('stateSynced', function() {
 			assert.deepEqual([['foo'], ['bar'], ['last']], comp.values);
-			assert.strictEqual(3, comp.element.childNodes.length);
+			assert.strictEqual(4, comp.element.childNodes.length);
 			done();
 		});
 	});
@@ -175,9 +195,9 @@ describe('MultiInput', function() {
 		});
 
 		const children = comp.element.children;
-		assert.ok(children[0].querySelector('button'));
 		assert.ok(children[1].querySelector('button'));
-		assert.ok(!children[2].querySelector('button'));
+		assert.ok(children[2].querySelector('button'));
+		assert.ok(!children[3].querySelector('button'));
 	});
 
 	it('should remove field when the remove button is clicked', function(done) {
@@ -185,17 +205,17 @@ describe('MultiInput', function() {
 			values: [['foo'], ['bar'], []]
 		});
 
-		let removeButton = comp.element.childNodes[0].querySelector('button');
+		let removeButton = comp.element.childNodes[1].querySelector('button');
 		dom.triggerEvent(removeButton, 'click');
 
 		comp.once('stateSynced', function() {
 			assert.deepEqual([['bar'], []], comp.values);
-			assert.strictEqual(2, comp.element.childNodes.length);
+			assert.strictEqual(3, comp.element.childNodes.length);
 			done();
 		});
 	});
 
 	function getFieldsForRow(parent, rowIndex) {
-		return parent.childNodes[rowIndex].childNodes[0].childNodes;
+		return parent.childNodes[rowIndex + 1].childNodes[0].childNodes;
 	}
 });
