@@ -96,9 +96,9 @@
 			name="{isNonnull($name) ? ($name + ($rowIndex + 1)) : ''}"
 			placeholder="{$placeholder ?: ''}"
 		/>
-		{if $hasError}
-			<p class="help-block">{$field.error}</p>
-		{/if}
+
+		<p class="help-block">{$field and $field.error ? $field.error : ''}</p>
+
 	</div>
 {/template}
 
