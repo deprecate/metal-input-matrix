@@ -176,6 +176,35 @@ describe('InputMatrix', function() {
 		assert.strictEqual('', fields[2].getAttribute('name'));
 	});
 
+	it('should add names with "[]" for array fields', function() {
+		comp = new InputMatrix({
+			fields: [[], []],
+			fieldsConfig: [
+				{
+					isArray: true,
+					name: 'address'
+				},
+				{
+					name: 'age'
+				},
+				{}
+			]
+		});
+		assert.strictEqual(3, comp.element.childNodes.length);
+
+		let fields = getFieldsForRow(comp.element, 0);
+		assert.strictEqual(3, fields.length);
+		assert.strictEqual('address[]', fields[0].getAttribute('name'));
+		assert.strictEqual('age1', fields[1].getAttribute('name'));
+		assert.strictEqual('', fields[2].getAttribute('name'));
+
+		fields = getFieldsForRow(comp.element, 1);
+		assert.strictEqual(3, fields.length);
+		assert.strictEqual('address[]', fields[0].getAttribute('name'));
+		assert.strictEqual('age2', fields[1].getAttribute('name'));
+		assert.strictEqual('', fields[2].getAttribute('name'));
+	});
+
 	it('should add new row with empty fields if field in last row is typed on', function(done) {
 		comp = new InputMatrix({
 			fields: [

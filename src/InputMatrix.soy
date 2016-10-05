@@ -77,6 +77,7 @@
 {/template}
 
 /**
+ * @param? isArray
  * @param? field
  * @param fieldIndex
  * @param? name
@@ -86,6 +87,7 @@
 {template .field}
 	{let $hasError: $field and $field.error and $field.error != '' /}
 	<div class="form-group {$hasError ? 'has-error' : ''}">
+		{let $nameSuffix: $isArray ? '[]' : ($rowIndex + 1) /}
 		<input
 			type="text"
 			value="{$field and $field.value ? $field.value : ''}"
@@ -93,7 +95,7 @@
 			data-field-index="{$fieldIndex}"
 			data-row-index="{$rowIndex}"
 			data-oninput="{'handleInput_'}"
-			name="{isNonnull($name) ? ($name + ($rowIndex + 1)) : ''}"
+			name="{isNonnull($name) ? ($name + $nameSuffix) : ''}"
 			placeholder="{$placeholder ?: ''}"
 		/>
 
