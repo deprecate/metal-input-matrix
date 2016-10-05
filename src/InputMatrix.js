@@ -96,6 +96,9 @@ InputMatrix.STATE = {
 	 * - {boolean=} disableDuplication Optional flag indicating that typing on
 	 *     this field should not cause another row of fields to be created even if
 	 *     it was on the last row.
+	 * - {boolean=} isArray Optional flag indicating that fields with this name
+	 *     should be named as array fields, not by having different names with
+	 *     indexes.
 	 * - {string=} label Optional label for the field.
 	 * - {string=} name Optional field name, which will have a counter suffix
 	 *     indicating its row position.
