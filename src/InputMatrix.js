@@ -93,6 +93,8 @@ InputMatrix.STATE = {
 	/**
 	 * An array of objects representing fields that should be rendered together.
 	 * Each field config can have one of the following configuration options:
+	 * - {boolean=} autocomplete Optional flag indicating that the "autocomplete"
+	 *     html attribute should be added to the input field.
 	 * - {boolean=} disableDuplication Optional flag indicating that typing on
 	 *     this field should not cause another row of fields to be created even if
 	 *     it was on the last row.
@@ -100,6 +102,7 @@ InputMatrix.STATE = {
 	 *     should be named as array fields, not by having different names with
 	 *     indexes.
 	 * - {string=} label Optional label for the field.
+	 * - {number=} maxLength Optional maximum length for this field.
 	 * - {string=} name Optional field name, which will have a counter suffix
 	 *     indicating its row position.
 	 * - {string=} placeholder Optional placeholder for the field.

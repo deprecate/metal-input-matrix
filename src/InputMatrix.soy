@@ -97,11 +97,25 @@
 			data-oninput="{'handleInput_'}"
 			name="{isNonnull($name) ? ($name + $nameSuffix) : ''}"
 			placeholder="{$placeholder ?: ''}"
+			{call .fieldAttrs data="all" /}
 		/>
 
 		<p class="help-block">{$field and $field.error ? $field.error : ''}</p>
 
 	</div>
+{/template}
+
+/**
+ * @param? autocomplete
+ * @param? maxLength
+ */
+{template .fieldAttrs kind="attributes"}
+	{if isNonnull($maxLength)}
+		maxlength="{$maxLength}"
+	{/if}
+	{if isNonnull($autocomplete)}
+		autocomplete
+	{/if}
 {/template}
 
 /**

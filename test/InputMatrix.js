@@ -47,6 +47,40 @@ describe('InputMatrix', function() {
 		assert.deepEqual(expectedFields, comp.fields);
 	});
 
+	it('should add the "autocomplete" html attribute to requested field', function() {
+		comp = new InputMatrix({
+			fields: [[{}, {}]],
+			fieldsConfig: [
+				{
+					autocomplete: true
+				},
+				{}
+			]
+		});
+		assert.strictEqual(2, comp.element.childNodes.length);
+
+		let fields = getFieldsForRow(comp.element, 0);
+		assert.ok(fields[0].hasAttribute('autocomplete'));
+		assert.ok(!fields[1].hasAttribute('autocomplete'));
+	});
+
+	it('should add the "maxlength" html attribute to requested field', function() {
+		comp = new InputMatrix({
+			fields: [[{}, {}]],
+			fieldsConfig: [
+				{
+					maxLength: 10
+				},
+				{}
+			]
+		});
+		assert.strictEqual(2, comp.element.childNodes.length);
+
+		let fields = getFieldsForRow(comp.element, 0);
+		assert.equal(10, fields[0].getAttribute('maxlength'));
+		assert.ok(!fields[1].hasAttribute('maxlength'));
+	});
+
 	it('should render error messages when given', function() {
 		comp = new InputMatrix({
 			fields: [[{
