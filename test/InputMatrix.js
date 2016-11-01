@@ -60,8 +60,8 @@ describe('InputMatrix', function() {
 		assert.strictEqual(2, comp.element.childNodes.length);
 
 		let fields = getFieldsForRow(comp.element, 0);
-		assert.ok(fields[0].hasAttribute('autocomplete'));
-		assert.ok(!fields[1].hasAttribute('autocomplete'));
+		assert.equal('on', fields[0].getAttribute('autocomplete'));
+		assert.equal('off', fields[1].getAttribute('autocomplete'));
 	});
 
 	it('should add the "maxlength" html attribute to requested field', function() {

@@ -113,9 +113,7 @@
 	{if isNonnull($maxLength)}
 		maxlength="{$maxLength}"
 	{/if}
-	{if isNonnull($autocomplete)}
-		autocomplete
-	{/if}
+	autocomplete="{$autocomplete ? 'on' : 'off'}"
 {/template}
 
 /**
