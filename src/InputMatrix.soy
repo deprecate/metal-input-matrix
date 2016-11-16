@@ -2,11 +2,13 @@
 
 /**
  * This renders the component's whole content.
+ * @param? elementClasses
  * @param? fields
  * @param fieldsConfig
+ * @param handleInput_
  */
 {template .render}
-	<div class="input-matrix">
+	<div class="input-matrix {$elementClasses ?: ''}">
 		<div class="input-matrix-labels">
 			{foreach $config in $fieldsConfig}
 				<label class="input-matrix-label">{$config.label ?: ''}</label>
@@ -28,6 +30,7 @@
 				{param last: (not $shouldAddRow) and index($rowFields) == (length($fieldObjs) - 1) /}
 				{param rowFields: $rowFields /}
 				{param rowIndex: index($rowFields) /}
+				{param handleInput_: $handleInput_ /}
 			{/call}
 		{/foreach}
 
@@ -37,6 +40,7 @@
 				{param last: true /}
 				{param rowFields: [] /}
 				{param rowIndex: length($fieldObjs) /}
+				{param handleInput_: $handleInput_ /}
 			{/call}
 		{/if}
 	</div>
@@ -44,12 +48,13 @@
 
 /**
  * @param fieldsConfig
+ * @param handleInput_
  * @param last
  * @param? rowFields
  * @param rowIndex
  */
 {template .row}
-	<div class="input-matrix-fields">
+	<div class="input-matrix-fields" data-row="{$rowIndex}">
 		<div class="input-matrix-fields-left">
 			{foreach $config in $fieldsConfig}
 				{let $index: index($config) /}
@@ -57,6 +62,7 @@
 					{param field: $rowFields ? $rowFields[$index] : null /}
 					{param fieldIndex: $index /}
 					{param rowIndex: $rowIndex /}
+					{param handleInput_: $handleInput_ /}
 				{/call}
 			{/foreach}
 		</div>
@@ -77,43 +83,46 @@
 {/template}
 
 /**
- * @param? isArray
+ * @param? autocomplete
+ * @param? editableWhileVisible
  * @param? field
  * @param fieldIndex
+ * @param handleInput_
+ * @param? isArray
+ * @param? initialShow
+ * @param? isTogglePassword
+ * @param? maxLength
  * @param? name
  * @param? placeholder
+ * @param? readonly
  * @param rowIndex
+ * @param type
  */
 {template .field}
 	{let $hasError: $field and $field.error and $field.error != '' /}
 	<div class="form-group {$hasError ? 'has-error' : ''}">
 		{let $nameSuffix: $isArray ? '[]' : ($rowIndex + 1) /}
-		<input
-			type="text"
-			value="{$field and $field.value ? $field.value : ''}"
-			class="form-control input-matrix-field"
-			data-field-index="{$fieldIndex}"
-			data-row-index="{$rowIndex}"
-			data-oninput="{'handleInput_'}"
-			name="{isNonnull($name) ? ($name + $nameSuffix) : ''}"
-			placeholder="{$placeholder ?: ''}"
-			{call .fieldAttrs data="all" /}
-		/>
+
+		{call Input.render}
+			{param autocomplete: $autocomplete ? 'on' : 'off' /}
+			{param classes: 'form-control input-matrix-field' /}
+			{param editableWhileVisible: isNonnull($editableWhileVisible) ? $editableWhileVisible : false /}
+			{param fieldIndex: $fieldIndex /}
+			{param initialShow: isNonnull($initialShow) ? $initialShow : true /}
+			{param isTogglePassword: isNonnull($isTogglePassword) ? $isTogglePassword : false /}
+			{param onInput: $handleInput_ /}
+			{param maxLength: isNonnull($maxLength) ? $maxLength : 524288 /}
+			{param name: isNonnull($name) ? ($name + $nameSuffix) : '' /}
+			{param placeholder: isNonnull($placeholder) ? $placeholder : '' /}
+			{param readonly: isNonnull($readonly) ? $readonly : false /}
+			{param rowIndex: $rowIndex /}
+			{param type: isNonnull($type) ? $type : 'text' /}
+			{param value: $field and $field.value ? $field.value : '' /}
+		{/call}
 
 		<p class="help-block">{$field and $field.error ? $field.error : ''}</p>
 
 	</div>
-{/template}
-
-/**
- * @param? autocomplete
- * @param? maxLength
- */
-{template .fieldAttrs kind="attributes"}
-	{if isNonnull($maxLength)}
-		maxlength="{$maxLength}"
-	{/if}
-	autocomplete="{$autocomplete ? 'on' : 'off'}"
 {/template}
 
 /**

@@ -4,6 +4,7 @@ import core from 'metal';
 import templates from './InputMatrix.soy.js';
 import Component from 'metal-component';
 import Soy from 'metal-soy';
+import 'metal-input';
 
 /**
  * This component automatically adds new fields to guarantee that there will
@@ -44,8 +45,13 @@ class InputMatrix extends Component {
 	handleRemoveClick_(event) {
 		const element = event.delegateTarget;
 		const index = this.convertAttrToInt_(element, 'data-row-index');
+
 		this.fields.splice(index, 1);
 		this.fields = this.fields;
+
+		for (let i = 0; i < this.fields.length; i++) {
+			console.log(this.fields[i])
+		}
 	}
 
 	/**

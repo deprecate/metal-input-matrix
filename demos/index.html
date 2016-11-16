@@ -3,63 +3,59 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Demo: InputMatrix</title>
-	<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+
+	<link rel="stylesheet" href="../node_modules/westyle/build/fonts/galano/galano.css">
+	<link rel="stylesheet" href="../node_modules/westyle/build/fonts/icon-12/icon-12.css">
+	<link rel="stylesheet" href="../node_modules/westyle/build/fonts/icon-16/icon-16.css">
+	<link rel="stylesheet" href="../node_modules/westyle/build/westyle.css">
+
 	<script src="../build/globals/input-matrix.js"></script>
-	<style>
-		.input-matrix-fields {
-			margin-bottom: 20px;
-		}
-
-		.input-matrix-label {
-			display: inline-block;
-			margin-right: 10px;
-			width: 36%
-		}
-
-		.input-matrix .form-group {
-			display: inline-block;
-			margin-right: 10px;
-			vertical-align: top;
-			width: 40%
-		}
-
-		.input-matrix-labels .input-matrix-label:last-child {
-			margin-right: 10%;
-		}
-
-		.input-matrix-fields-left {
-			display: inline-block;
-			width: 90%;
-		}
-
-		.input-matrix-fields-right {
-			display: inline-block;
-		}
-	</style>
 </head>
 <body>
-	<h1>InputMatrix</h1>
+	<div class="container-hybrid-half">
+		<div class="row">
+			<div class="content-header">
+				<div class="header-title">
+					Metal Input-Matrix
+				</div>
+			</div>
+		</div>
+		<div class="content-body">
+			<section class="row">
+				<div class="col-xs-16">
+					<div id="form"></div>
+				</div>
+			</section>
+		</div>
+
+	</div>
+
 	<script type="text/javascript">
 		window.inputMatrix = new metal.InputMatrix({
-			fields: [
-				[{value: 'Maira', error: 'Awesomeness exceeds maximum level. Please type the name of someone less awesome.'}, {value: 26}],
-				[{}, {value: 12}]
+			elementClasses: 'input-matrix--inline',
+			fields:[
+				[{value:'aaa'}, {value:'aaa'}],
+				[{value:'bbb'}, {value:'bbb'}]
 			],
 			fieldsConfig: [
 				{
 					isArray: true,
-					label: 'Name',
-					name: 'name',
-					placeholder: 'Jose'
+					label: 'Key',
+					name: 'key',
+					placeholder: 'Key'
 				},
 				{
 					disableDuplication: true,
-					label: 'Age',
-					name: 'age',
-					placeholder: '19'
+					label: 'Value',
+					name: 'value',
+					placeholder: 'value',
+					initalShow: true,
+					isTogglePassword: true,
+					readonly: false,
+					editableWhileVisible: true
 				}
 			]
-		});
+		}, '#form');
 	</script>
 </body>
 </html>
