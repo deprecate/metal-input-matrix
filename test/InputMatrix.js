@@ -47,38 +47,6 @@ describe('InputMatrix', function() {
 		assert.deepEqual(expectedFields, comp.fields);
 	});
 
-	it('should add the "autocomplete" html attribute to requested field', function() {
-		comp = new InputMatrix({
-			fields: [[{}, {}]],
-			fieldsConfig: [
-				{},
-				{autocomplete: 'off'}
-			]
-		});
-		assert.strictEqual(2, comp.element.childNodes.length);
-
-		let fields = getFieldsForRow(comp.element, 0);
-		assert.equal('on', fields[0].getAttribute('autocomplete'));
-		assert.equal('off', fields[1].getAttribute('autocomplete'));
-	});
-
-	it('should add the "maxlength" html attribute to requested field', function() {
-		comp = new InputMatrix({
-			fields: [[{}, {}]],
-			fieldsConfig: [
-				{
-					maxLength: 10
-				},
-				{}
-			]
-		});
-		assert.strictEqual(2, comp.element.childNodes.length);
-
-		let fields = getFieldsForRow(comp.element, 0);
-		assert.equal(10, fields[0].getAttribute('maxlength'));
-		assert.ok(!fields[1].hasAttribute('maxlength'));
-	});
-
 	it('should render error messages when given', function() {
 		comp = new InputMatrix({
 			fields: [[{
@@ -152,60 +120,6 @@ describe('InputMatrix', function() {
 		assert.strictEqual(2, labels.length);
 		assert.strictEqual('Label 1', labels[0].textContent);
 		assert.strictEqual('Label 2', labels[1].textContent);
-	});
-
-	it('should add placeholders as specified in "fieldsConfig"', function() {
-		comp = new InputMatrix({
-			fields: [[], []],
-			fieldsConfig: [
-				{
-					placeholder: 'Placeholder 1'
-				},
-				{
-					placeholder: 'Placeholder 2'
-				}
-			]
-		});
-
-		assert.strictEqual(3, comp.element.childNodes.length);
-
-		let fields = getFieldsForRow(comp.element, 0);
-		assert.strictEqual(2, fields.length);
-		assert.strictEqual('Placeholder 1', fields[0].placeholder);
-		assert.strictEqual('Placeholder 2', fields[1].placeholder);
-
-		fields = getFieldsForRow(comp.element, 1);
-		assert.strictEqual(2, fields.length);
-		assert.strictEqual('Placeholder 1', fields[0].placeholder);
-		assert.strictEqual('Placeholder 2', fields[1].placeholder);
-	});
-
-	it('should add names as specified in "fieldsConfig"', function() {
-		comp = new InputMatrix({
-			fields: [[], []],
-			fieldsConfig: [
-				{
-					name: 'address'
-				},
-				{
-					name: 'age'
-				},
-				{}
-			]
-		});
-		assert.strictEqual(3, comp.element.childNodes.length);
-
-		let fields = getFieldsForRow(comp.element, 0);
-		assert.strictEqual(3, fields.length);
-		assert.strictEqual('address1', fields[0].getAttribute('name'));
-		assert.strictEqual('age1', fields[1].getAttribute('name'));
-		assert.strictEqual('', fields[2].getAttribute('name'));
-
-		fields = getFieldsForRow(comp.element, 1);
-		assert.strictEqual(3, fields.length);
-		assert.strictEqual('address2', fields[0].getAttribute('name'));
-		assert.strictEqual('age2', fields[1].getAttribute('name'));
-		assert.strictEqual('', fields[2].getAttribute('name'));
 	});
 
 	it('should add names with "[]" for array fields', function() {
