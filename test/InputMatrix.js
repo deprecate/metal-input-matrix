@@ -51,10 +51,8 @@ describe('InputMatrix', function() {
 		comp = new InputMatrix({
 			fields: [[{}, {}]],
 			fieldsConfig: [
-				{
-					autocomplete: true
-				},
-				{}
+				{},
+				{autocomplete: 'off'}
 			]
 		});
 		assert.strictEqual(2, comp.element.childNodes.length);
