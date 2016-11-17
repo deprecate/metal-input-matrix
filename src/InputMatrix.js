@@ -48,10 +48,6 @@ class InputMatrix extends Component {
 
 		this.fields.splice(index, 1);
 		this.fields = this.fields;
-
-		for (let i = 0; i < this.fields.length; i++) {
-			console.log(this.fields[i])
-		}
 	}
 
 	/**

@@ -83,40 +83,21 @@
 {/template}
 
 /**
- * @param? autocomplete
- * @param? editableWhileVisible
  * @param? field
- * @param fieldIndex
  * @param handleInput_
  * @param? isArray
- * @param? initialShow
- * @param? isTogglePassword
- * @param? maxLength
  * @param? name
- * @param? placeholder
- * @param? readonly
- * @param rowIndex
- * @param type
+ * @param? rowIndex
  */
 {template .field}
 	{let $hasError: $field and $field.error and $field.error != '' /}
 	<div class="form-group {$hasError ? 'has-error' : ''}">
 		{let $nameSuffix: $isArray ? '[]' : ($rowIndex + 1) /}
 
-		{call Input.render}
-			{param autocomplete: $autocomplete ? 'on' : 'off' /}
+		{call Input.render data="all"}
 			{param classes: 'form-control input-matrix-field' /}
-			{param editableWhileVisible: isNonnull($editableWhileVisible) ? $editableWhileVisible : false /}
-			{param fieldIndex: $fieldIndex /}
-			{param initialShow: isNonnull($initialShow) ? $initialShow : true /}
-			{param isTogglePassword: isNonnull($isTogglePassword) ? $isTogglePassword : false /}
 			{param onInput: $handleInput_ /}
-			{param maxLength: isNonnull($maxLength) ? $maxLength : 524288 /}
 			{param name: isNonnull($name) ? ($name + $nameSuffix) : '' /}
-			{param placeholder: isNonnull($placeholder) ? $placeholder : '' /}
-			{param readonly: isNonnull($readonly) ? $readonly : false /}
-			{param rowIndex: $rowIndex /}
-			{param type: isNonnull($type) ? $type : 'text' /}
 			{param value: $field and $field.value ? $field.value : '' /}
 		{/call}
 
