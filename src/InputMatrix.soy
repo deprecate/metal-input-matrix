@@ -2,8 +2,8 @@
 
 /**
  * This renders the component's whole content.
+ * @param? currentFields_
  * @param? elementClasses
- * @param? fields
  * @param fieldsConfig
  * @param? handleInput_
  */
@@ -15,11 +15,11 @@
 			{/foreach}
 		</div>
 
-		{let $fieldObjs: $fields ? $fields : [[]] /}
+		{let $fieldObjs: $currentFields_ ? $currentFields_ : [[]] /}
 
 		{let $shouldAddRow kind="text"}
 			{call .shouldAddRow}
-				{param fields: $fieldObjs[length($fieldObjs) - 1] ?: [] /}
+				{param currentFields_: $fieldObjs[length($fieldObjs) - 1] ?: [] /}
 				{param fieldsConfig: $fieldsConfig /}
 			{/call}
 		{/let}
@@ -107,13 +107,13 @@
 {/template}
 
 /**
- * @param fields
+ * @param currentFields_
  * @param fieldsConfig
  */
 {template .shouldAddRow kind="text"}
 	{foreach $config in $fieldsConfig}
 		{let $index: index($config) /}
-		{let $hasValue: isNonnull($fields[$index]) and isNonnull($fields[$index].value) and $fields[$index].value != '' /}
+		{let $hasValue: isNonnull($currentFields_[$index]) and isNonnull($currentFields_[$index].value) and $currentFields_[$index].value != '' /}
 		{if (not $config.disableDuplication) and $hasValue}
 			true
 		{/if}

@@ -12,6 +12,13 @@ import 'metal-input';
  */
 class InputMatrix extends Component {
 	/**
+		 * @inheritDoc
+		 */
+	created() {
+		this.currentFields_ = this.fields;
+	}
+
+	/**
 	 * Converts the specified element attribute to an integer.
 	 * @param {!Element} element
 	 * @param {string} attrName
@@ -32,9 +39,9 @@ class InputMatrix extends Component {
 		const element = event.delegateTarget;
 		const fieldIndex = this.convertAttrToInt_(element, 'data-field-index');
 		const rowIndex = this.convertAttrToInt_(element, 'data-row-index');
-		this.fields[rowIndex][fieldIndex] = this.fields[rowIndex][fieldIndex] || {};
-		this.fields[rowIndex][fieldIndex].value = element.value;
-		this.fields = this.fields;
+		this.currentFields_[rowIndex][fieldIndex] = this.currentFields_[rowIndex][fieldIndex] || {};
+		this.currentFields_[rowIndex][fieldIndex].value = element.value;
+		this.currentFields_ = this.currentFields_;
 	}
 
 	/**
@@ -46,14 +53,15 @@ class InputMatrix extends Component {
 		const element = event.delegateTarget;
 		const index = this.convertAttrToInt_(element, 'data-row-index');
 
-		this.fields.splice(index, 1);
-		this.fields = this.fields;
+		this.currentFields_.splice(index, 1);
+		this.currentFields_ = this.currentFields_;
 	}
 
 	/**
-	 * Sets the `fields` state property. If the last row contains at least one
-	 * non empty field that doesn't have `disableDuplication` set to true, a new
-	 * row will be added automatically here.
+	 * Sets the `fields` and `currentFields_` state property. If the last row
+	 * contains at least one non empty field that doesn't have
+	 * `disableDuplication` set to true, a new row will be added automatically
+	 * here.
 	 * @param {!Array<!Array<string>} fields
 	 * @return {!Array<!Array<string>}
 	 * @protected
@@ -79,6 +87,20 @@ class InputMatrix extends Component {
 Soy.register(InputMatrix, templates);
 
 InputMatrix.STATE = {
+	/**
+	 * Internal information for each rendered field, in each row. Each field object can
+	 * contain the following data:
+	 * - {string=} value The field's current value
+	 * - {string-} error The error message to be rendered for the field.
+	 * @type {!Array<!Array<!Object>>}
+	 */
+	currentFields_: {
+		internal: true,
+		setter: 'setFieldsFn_',
+		validator: core.isArray,
+		valueFn: () => []
+	},
+
 	/**
 	 * Information for each rendered field, in each row. Each field object can
 	 * contain the following data:
