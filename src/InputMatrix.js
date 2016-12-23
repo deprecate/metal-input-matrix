@@ -12,8 +12,8 @@ import 'metal-input';
  */
 class InputMatrix extends Component {
 	/**
-		 * @inheritDoc
-		 */
+	 * @inheritDoc
+	 */
 	created() {
 		this.currentFields_ = this.fields;
 	}
@@ -82,6 +82,13 @@ class InputMatrix extends Component {
 		}
 
 		return fields;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	syncFields(val) {
+		this.currentFields_ = val;
 	}
 }
 Soy.register(InputMatrix, templates);
