@@ -35,6 +35,6 @@
     "babel-preset-metal": "^4.0.0",
     "gulp": "^3.8.11",
     "gulp-metal": "^1.0.0",
-    "marble": "wedeploy/marble#master"
+    "marble": "^2.3.0"
   }
 }
