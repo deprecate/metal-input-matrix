@@ -8,6 +8,8 @@
  * @param? handleInput_
  */
 {template .render}
+	{@param? closeButtonHtml: html|string}
+
 	<div class="input-matrix {$elementClasses ?: ''}">
 		<div class="input-matrix-labels">
 			{foreach $config in $fieldsConfig}
@@ -26,6 +28,7 @@
 
 		{foreach $rowFields in $fieldObjs}
 			{call .row}
+				{param closeButtonHtml : $closeButtonHtml /}
 				{param fieldsConfig : $fieldsConfig /}
 				{param last: (not $shouldAddRow) and index($rowFields) == (length($fieldObjs) - 1) /}
 				{param rowFields: $rowFields /}
@@ -36,6 +39,7 @@
 
 		{if $shouldAddRow != ''}
 			{call .row}
+				{param closeButtonHtml : $closeButtonHtml /}
 				{param fieldsConfig : $fieldsConfig /}
 				{param last: true /}
 				{param rowFields: [] /}
@@ -47,11 +51,12 @@
 {/template}
 
 /**
+ * @param closeButtonHtml
  * @param fieldsConfig
- * @param? handleInput_
  * @param last
- * @param? rowFields
  * @param rowIndex
+ * @param? handleInput_
+ * @param? rowFields
  */
 {template .row}
 	<div class="input-matrix-fields" data-row="{$rowIndex}">
@@ -75,7 +80,11 @@
 					data-row-index="{$rowIndex}"
 					aria-label="Remove"
 					tabindex="-1">
-					<span aria-hidden="true">×</span>
+					{if $closeButtonHtml}
+						{$closeButtonHtml}
+					{else}
+						<span aria-hidden="true">×</span>
+					{/if}
 				</button>
 			{/if}
 		</div>

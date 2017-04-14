@@ -95,6 +95,13 @@ Soy.register(InputMatrix, templates);
 
 InputMatrix.STATE = {
 	/**
+	 * The content of close button of the alert.
+	 * @type {html|string}
+	 */
+	closeButtonHtml: {
+	},
+
+	/**
 	 * Internal information for each rendered field, in each row. Each field object can
 	 * contain the following data:
 	 * - {string=} value The field's current value
