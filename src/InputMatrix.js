@@ -83,13 +83,6 @@ class InputMatrix extends Component {
 
 		return fields;
 	}
-
-	/**
-	 * @inheritDoc
-	 */
-	syncFields(val) {
-		this.currentFields_ = val;
-	}
 }
 Soy.register(InputMatrix, templates);
 
