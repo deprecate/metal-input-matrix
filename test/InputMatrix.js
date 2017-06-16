@@ -325,7 +325,6 @@ describe('InputMatrix', function() {
 					value: 'bar'
 				}]
 			];
-
 			comp.setCurrentFields(newFields);
 
 			comp.once('stateSynced', function() {
