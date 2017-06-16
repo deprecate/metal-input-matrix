@@ -19,6 +19,14 @@ class InputMatrix extends Component {
 	}
 
 	/**
+	 * Set current fields.
+	 * @param {Object} fields
+	 */
+	setCurrentFields(fields) {
+		this.currentFields_ = fields;
+	}
+
+	/**
 	 * Converts the specified element attribute to an integer.
 	 * @param {!Element} element
 	 * @param {string} attrName
@@ -82,13 +90,6 @@ class InputMatrix extends Component {
 		}
 
 		return fields;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	syncFields(val) {
-		this.currentFields_ = val;
 	}
 }
 Soy.register(InputMatrix, templates);

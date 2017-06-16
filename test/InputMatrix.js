@@ -307,29 +307,22 @@ describe('InputMatrix', function() {
 		});
 	});
 
-	it('should render template when fields changes', function(done) {
-		comp = new InputMatrix({
-			fields: [
-				[{
-					value: 'foo'
-				}]
-			]
-		});
+	it('should set new fields to current fields internal state', function(done) {
+		comp = new InputMatrix();
 
-		comp.once('rendered', function() {
-			comp.fields = [
-				[{
-					value: 'foo'
-				}],
-				[{
-					value: 'bar'
-				}]
-			];
-			comp.once('rendered', function() {
-				assert.strictEqual(4, comp.element.childNodes.length);
-				done();
-			});
-		});
+    comp.setCurrentFields([
+      [{
+        value: 'foo'
+      }],
+      [{
+        value: 'bar'
+      }]
+    ]);
+
+    comp.once('stateSynced', function() {
+      assert.strictEqual(4, comp.element.childNodes.length);
+      done();
+    });
 	});
 
 	function getFieldsForRow(parent, rowIndex) {
