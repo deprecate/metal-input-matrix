@@ -307,7 +307,7 @@ describe('InputMatrix', function() {
 		});
 	});
 
-  it('should set new fields to current fields internal state', function(done) {
+	it('should set new fields to current fields internal state', function(done) {
 		comp = new InputMatrix({
 			fields: [
 				[{
@@ -326,7 +326,7 @@ describe('InputMatrix', function() {
 				}]
 			];
 
-      comp.setCurrentFields(newFields);
+			comp.setCurrentFields(newFields);
 
 			comp.once('stateSynced', function() {
 				assert.strictEqual(4, comp.element.childNodes.length);
