@@ -313,7 +313,6 @@ describe('InputMatrix', function() {
 				value: 'foo'
 			}]]
 		});
-		assert.strictEqual(3, comp.element.childNodes.length);
 
 		var newFields = [[{
 			value: 'bar'
