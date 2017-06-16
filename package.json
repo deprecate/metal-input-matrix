@@ -1,6 +1,6 @@
 {
   "name": "metal-input-matrix",
-  "version": "2.1.4",
+  "version": "2.2.0",
   "description": "Metal.js component that automatically adds new fields to guarantee that there will always be an empty field at the end",
   "license": "BSD",
   "repository": "wedeploy/metal-input-matrix",
