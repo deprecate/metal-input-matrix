@@ -308,30 +308,21 @@ describe('InputMatrix', function() {
 	});
 
 	it('should set new fields to current fields internal state', function(done) {
-		comp = new InputMatrix({
-			fields: [
-				[{
-					value: 'foo'
-				}]
-			]
-		});
+		comp = new InputMatrix();
 
-		comp.once('stateSynced', function() {
-			var newFields = [
-				[{
-					value: 'foo'
-				}],
-				[{
-					value: 'bar'
-				}]
-			];
-			comp.setCurrentFields(newFields);
+    comp.setCurrentFields([
+      [{
+        value: 'foo'
+      }],
+      [{
+        value: 'bar'
+      }]
+    ]);
 
-			comp.once('stateSynced', function() {
-				assert.strictEqual(4, comp.element.childNodes.length);
-				done();
-			});
-		});
+    comp.once('stateSynced', function() {
+      assert.strictEqual(4, comp.element.childNodes.length);
+      done();
+    });
 	});
 
 	function getFieldsForRow(parent, rowIndex) {
