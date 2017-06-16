@@ -307,30 +307,30 @@ describe('InputMatrix', function() {
 		});
 	});
 
-  it('should set new fields to current fields internal state', function(done) {
-    comp = new InputMatrix({
+	it('should set new fields to current fields internal state', function(done) {
+		comp = new InputMatrix({
 			fields: [[{
 				value: 'foo'
 			}]]
 		});
 		assert.strictEqual(3, comp.element.childNodes.length);
 
-    var newFields = [[{
-      value: 'bar'
-    }]];
-    comp.setCurrentFields(newFields);
+		var newFields = [[{
+			value: 'bar'
+		}]];
+		comp.setCurrentFields(newFields);
 
-    comp.once('stateSynced', function() {
-      var expectedFields = [
+		comp.once('stateSynced', function() {
+			var expectedFields = [
 				[{
 					value: 'bar'
 				}],
 				[]
 			];
-      assert.deepEqual(expectedFields, comp.currentFields_);
-      done();
-    });
-  });
+			assert.deepEqual(expectedFields, comp.currentFields_);
+			done();
+		});
+	});
 
 	function getFieldsForRow(parent, rowIndex) {
 		return parent.childNodes[rowIndex + 1].querySelectorAll('input');
